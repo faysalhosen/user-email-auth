@@ -4,38 +4,37 @@ import { useState } from "react";
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
 
 
+
 const Register = () => {
-    const [registerError,setRegisterError] = useState('');
-    const [success,setSuccess] = useState('');
+    const [registerError,setRegisterError] = useState({error:false,message:''});
+    const [success,setSuccess] = useState(false);
     const [showPassword,setShowPassword] = useState(false)
 
 
 
-()
+
 
     const handleRegister = e => {
         e.preventDefault();
+
+         // reset error
+         setRegisterError ({error:false,message:''});
+         setSuccess({error:false,message:''});
+ 
         const email = e.target.email.value;
         const password = e.target.password.value;
         console.log(email,password);
 
         if(password.length <6){
-            setRegisterError('Password should be at least 6 characters or longer');
+            setRegisterError({error:true,message:'Password should be at least 6 characters or longer'});
+            //'Password should be at least 6 characters or longer'
             return;
 
         }
         
-
-        // reset error
-        setRegisterError ('');
-        setSuccess('');
-
-        if(password.length < 6){
-            setRegisterError('Password should be at least 6 characters or longer')
-            return;
-        }
         else if(!/[A-Z]/.test(password)){
-            setRegisterError('Your password should have at least one upper case character.')
+            setRegisterError({error:true,message:'Your password should have at least one upper case character.'})
+            //'Your password should have at least one upper case character.'
         
 
         }
@@ -48,7 +47,7 @@ const Register = () => {
             })
             .catch (error => {
                 console.log(error);
-                setRegisterError(error.message);
+                setRegisterError({error:true,message:error});
             })
         
     }
@@ -71,7 +70,7 @@ const Register = () => {
             </form>
 
             {
-                registerError && <p className="text-red-700"> {registerError}</p>
+                registerError.error && <p className="text-red-700"> {registerError.message}</p>
             }
             {
                 success && <p className="text-green-600"> {success}</p>
